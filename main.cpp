@@ -24,7 +24,7 @@ int numero_rutas(ifstream &entrada) {
 	return stoi(line);
 }
 
-int tiempo_maximo(ifstream &entrada) {
+float tiempo_maximo(ifstream &entrada) {
 	string line;
 	getline(entrada, line, ' ');
 	getline(entrada, line);
@@ -55,7 +55,8 @@ float DistanciaEntrePuntos(float x1, float y1, float x2, float y2){
 int main()
 {
 	string line;
-	int n_nodos, n_rutas, t_max;
+	int n_nodos, n_rutas;
+	float t_max;
 	ifstream entrada ("input.txt");
 
 	if (entrada.is_open()) {
@@ -76,6 +77,7 @@ int main()
 		//}
 		cout << "Numero de nodos: " << n_nodos << '\n';
 		cout << "Numero de rutas: " << n_rutas << '\n';
+		cout << "Tiempo maximo por ruta: " << t_max << '\n';
 		entrada.close();
 
 		//Generar matriz que contiene distancias entre cada par de nodos
