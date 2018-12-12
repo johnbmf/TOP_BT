@@ -73,28 +73,23 @@ float DistanciaEntrePuntos(float x1, float y1, float x2, float y2){
 
 bool nodo_in_path(int &nodo){
 	if(path_actual.empty()){
-		cout << "nodo_in_path, nodo: " << nodo << " No esta en path. Return False.\n";
     return false;
   }
 	for (int i = 0; i < path_actual.size(); i++){
 		if (path_actual[i].nodo == nodo){
-			cout << "true\n";
 			return true;
 		}
 	}
-	cout << "false\n";
 	return false;
 }
 
 bool viola_tiempo(parada &camino){
-	cout << "Llamada a viola_tiempo con params. ruta: " << camino.ruta << "\tnodo: " << camino.nodo << "\n";
 	if(path_actual.empty()){
 		if (distancias[0][camino.nodo] +  distancias[n_nodos - 1][camino.nodo] <= t_max){
 			return false;
 		}
     	return true;
   }
-	cout << "Viola_tiempo: obteniendo nodos de la misma ruta. \nruta:" << camino.ruta << "\tnodo: " << camino.nodo << "\n";
 	vector<int> nodos_misma_ruta;
 	float t_ruta = 0;
 	for (int i=0; i< path_actual.size(); i++){
@@ -103,20 +98,13 @@ bool viola_tiempo(parada &camino){
 		}
 	}
 	nodos_misma_ruta.push_back(camino.nodo);
-	cout << "Viola tiempo, nodos en la misma ruta: ";
-	for (int i=0; i<nodos_misma_ruta.size(); i++){
-		cout << nodos_misma_ruta[i] << ' ';
-	}
-	cout << "\n";
 	//En este momento nodos_misma_ruta contiene los nodos utilizados en una ruta a evaluar la restriccion de tiempo.
 
 	for (int i=0; i< nodos_misma_ruta.size()-1; i++){
 		t_ruta += distancias[nodos_misma_ruta[i]][nodos_misma_ruta[i+1]];
 	}
-	cout << "tiempo ruta: " << t_ruta << "\n";
 	t_ruta += distancias[0][nodos_misma_ruta[0]];
 	t_ruta += distancias[nodos_misma_ruta.back()][n_nodos-1];
-	cout << "tiempo ruta: " << t_ruta << "\n";
 	if(t_ruta <= t_max){
 		return false;
 	}
@@ -143,16 +131,12 @@ void Reg_sol(){
 
 void Recursivo(int n_path, bool control){
 	parada camino;
-	cout << "n_path: " << n_path << "\n";
-	cout << "control: " << control << "\n";
 
 	for (int i = 1; i < n_nodos - 1 ; i++){
-		cout << "i: " << i << "\tn_nodos-1: " << n_nodos-1 << "\n";
 		camino.ruta = n_path;
 		camino.nodo = i;
 
 		//Si el nodo agregado esta en el camino, entonces si o si existe una ruta mas optima, por lo que realiza backtracking (cambio de rama)
-		cout << "Llamando a nodo_in_path con params. nodo: " << camino.nodo << "\n";
 		if (nodo_in_path(camino.nodo)){
 			continue;
 		}
@@ -166,8 +150,6 @@ void Recursivo(int n_path, bool control){
 		//Terminada la recursividad, si hay al menos un nodo en cada ruta, se evalua si es mejor solucion hasta el momento.
 		else{
 			path_actual.push_back(camino);
-			cout << "Se agrega nodo al camino actual\n";
-			cout << "\nLlamada a recursivo con params: " << n_path << "true.\n";
 			Recursivo(n_path, true);
 			if (n_path == n_rutas){
 				Reg_sol();
@@ -187,7 +169,7 @@ void Recursivo(int n_path, bool control){
 
 int main(){
 	string line;
-	ifstream entrada ("instancias/Set_21_234/p2.2.c.txt");
+	ifstream entrada ("instancias/Set_32_234/p1.2.h.txt");
 
 	if (entrada.is_open()) {
 		//Determinar numero de nodos y el numero de rutas a generar
@@ -245,17 +227,32 @@ int main(){
   start = clock();
 	Recursivo(1, false);
 	duration = ( clock() - start ) / (double) CLOCKS_PER_SEC;
-  cout << "Duracion de ejecucion: " << duration << "\n";
-	//Resultados
+  cout << "Tiempo de ejecucion del algoritmo: " << duration << "\n";
 
-	int ac = 1;
-	for (int i=0; i<path_solucion.size(); i++){
-		if (ac != path_solucion[i].ruta){
-			cout << '\n';
-			ac += 1;
+	//Impresion por consola de los resultados obtenidos.
+	vector<int> sols;
+	float tiempo_ruta = 0;
+	cout << "Puntaje: " << puntaje_solucion << "\n";
+	for (int i=1; i<=n_rutas ; i++){
+		for (int j=0; j<path_solucion.size(); j++){
+			if(path_solucion[j].ruta == i){
+				sols.push_back(path_solucion[j].nodo);
+			}
 		}
 
-		cout << path_solucion[i].nodo << ' ';
+		for (int j=0; j < sols.size()-1; j++){
+			tiempo_ruta += distancias[sols[j]][sols[j+1]];
+		}
+		tiempo_ruta += distancias[0][sols[0]];
+		tiempo_ruta += distancias[sols.back()][n_nodos-1];
+		cout << "T: " << tiempo_ruta << " - Ruta: " << 0 << " ";
+
+		for (int j=0; j < sols.size(); j++){
+			cout << sols[j] << " ";
+		}
+		cout << n_nodos - 1 << "\n";
+		tiempo_ruta = 0;
+		sols.clear();
 	}
 	return 0;
 }
