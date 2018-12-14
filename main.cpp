@@ -169,7 +169,7 @@ void Recursivo(int n_path, bool control){
 
 int main(){
 	string line;
-	ifstream entrada ("instancias/Set_32_234/p1.2.h.txt");
+	ifstream entrada ("MyInst/N21.T11.M4.txt");
 
 	if (entrada.is_open()) {
 		//Determinar numero de nodos y el numero de rutas a generar
