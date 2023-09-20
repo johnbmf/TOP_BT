@@ -1,10 +1,10 @@
 //Inlcusion de librerias
 #include <iostream>		//cout, stof, stoi
 #include <fstream>		//getline, ifstream,
-#include <string>			//strings
-#include <vector>			//vectors
-#include <ctime>			//measure time
-#include <cmath>			//sqrt
+#include <string>		//strings
+#include <vector>		//vectors
+#include <ctime>		//measure time
+#include <cmath>		//sqrt
 
 //Global
 using namespace std;
@@ -14,6 +14,7 @@ struct parada{
 	int ruta;
 	int nodo;
 };
+
 //Variables globales con info del problema
 int n_nodos, n_rutas;
 float t_max;
@@ -22,6 +23,7 @@ vector<vector<float>> distancias;
 //Variables globales que contienen la informacion de la mejor solucion encontrada
 vector<parada> path_solucion;
 int puntaje_solucion = 0;
+
 //1d-Vector que guarda el puntaje de cada nodo
 vector<int> puntajes;
 
@@ -73,8 +75,8 @@ float DistanciaEntrePuntos(float x1, float y1, float x2, float y2){
 
 bool nodo_in_path(int &nodo){
 	if(path_actual.empty()){
-    return false;
-  }
+    		return false;
+  	}
 	for (int i = 0; i < path_actual.size(); i++){
 		if (path_actual[i].nodo == nodo){
 			return true;
@@ -89,7 +91,7 @@ bool viola_tiempo(parada &camino){
 			return false;
 		}
     	return true;
-  }
+  	}
 	vector<int> nodos_misma_ruta;
 	float t_ruta = 0;
 	for (int i=0; i< path_actual.size(); i++){
@@ -209,25 +211,25 @@ int main(){
 	}
 
 	ofstream myfile ("disti.txt");
-  if (myfile.is_open())
-  {
-    for (int i=0 ; i<distancias.size(); i++){
+	
+	if (myfile.is_open()){
+    		for (int i=0 ; i<distancias.size(); i++){
 			for (int j = 0; j < distancias.size(); j++) {
 				myfile << distancias[i][j] << "\t";
 			}
 			myfile << "\n";
 		}
 		myfile.close();
-  }
-  else cout << "Unable to open file";
+  	}
+  	else cout << "Unable to open file";
 
 	//Comienzo de recursion
 	clock_t start;
-  double duration;
-  start = clock();
+  	double duration;
+  	start = clock();
 	Recursivo(1, false);
 	duration = ( clock() - start ) / (double) CLOCKS_PER_SEC;
-  cout << "Tiempo de ejecucion del algoritmo: " << duration << "\n";
+  	cout << "Tiempo de ejecucion del algoritmo: " << duration << "\n";
 
 	//Impresion por consola de los resultados obtenidos.
 	vector<int> sols;
